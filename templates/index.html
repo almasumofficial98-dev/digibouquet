@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <h1>Create Your Digital Bouquet</h1>
+        <p>Select flowers and write a message.</p>
+    </div>
+</section>
+
+<section class="services">
+    <div class="container">
+
+        <form action="/create" method="post" class="bouquet-form">
+
+            <h3>Choose Flowers</h3>
+
+            <div class="service-grid">
+                <label class="card">
+                    <input type="checkbox" name="flowers" value="Rose"> 🌹 Rose
+                </label>
+                <label class="card">
+                    <input type="checkbox" name="flowers" value="Lily"> 🌸 Lily
+                </label>
+                <label class="card">
+                    <input type="checkbox" name="flowers" value="Tulip"> 🌷 Tulip
+                </label>
+                <label class="card">
+                    <input type="checkbox" name="flowers" value="Sunflower"> 🌻 Sunflower
+                </label>
+            </div>
+
+            <h3>Your Message</h3>
+
+            <textarea
+                name="message"
+                class="message-box"
+                placeholder="Write your message here..."
+                rows="4"></textarea>
+
+            <br><br>
+
+            <button type="submit">Create Bouquet</button>
+
+        </form>
+
+    </div>
+</section>
+
+{% endblock %}

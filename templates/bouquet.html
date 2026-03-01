@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <h1>Your Digital Bouquet</h1>
+    </div>
+</section>
+
+<section class="services">
+    <div class="container">
+
+        <div class="bouquet">
+            {% for flower in flowers %}
+                <span class="card">{{ flower }}</span>
+            {% endfor %}
+        </div>
+
+        {% if message %}
+            <p class="message">“{{ message }}”</p>
+        {% endif %}
+
+        {% if owner %}
+            <!-- ONLY CREATOR SEES THIS -->
+            <button class="share-btn" onclick="copyLink()">
+                Copy Share Link
+            </button>
+        {% endif %}
+
+    </div>
+</section>
+
+{% if owner %}
+<script>
+function copyLink() {
+    const link = "{{ request.url.replace('?owner=1', '') }}";
+
+    navigator.clipboard.writeText(link)
+        .then(() => {
+            alert("Link copied to clipboard!");
+        })
+        .catch(() => {
+            alert("Copy failed. Please try again.");
+        });
+}
+</script>
+{% endif %}
+
+{% endblock %}
