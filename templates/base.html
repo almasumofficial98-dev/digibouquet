@@ -2,29 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DigiBouquet</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>DigiBouquet</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-
-<nav class="navbar">
-    <div class="container nav-inner">
-        <div class="logo">DigiBouquet</div>
-        <ul class="nav-links">
-            <li><a href="/">Home</a></li>
-        </ul>
+    <div class="app-container">
+        {% block content %}{% endblock %}
     </div>
-</nav>
-
-{% block content %}{% endblock %}
-
-<footer>
-    <div class="container">
-        © 2026 DigiBouquet
-    </div>
-</footer>
-
 </body>
 </html>

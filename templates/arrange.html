@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Customize Your Bouquet</h1>
+
+<div id="canvas">
+    <img id="leaves" src="{{ url_for('static', filename='images/leaves.png') }}" alt="Leaves">
+
+    {% for f in flowers %}
+    <img class="flower draggable"
+         data-id="{{ f.id }}"
+         src="{{ url_for('static', filename='images/' ~ f.id ~ '.png') }}"
+         style="{% if f.x != '' %}left: {{ f.x }}px; top: {{ f.y }}px;{% endif %}">
+    {% endfor %}
+</div>
+
+<div class="controls">
+    <button class="btn-secondary" onclick="randomize()">🔀 Scramble</button>
+    <button class="btn-primary" onclick="share()">🔗 Share Bouquet</button>
+</div>
+
+{% if message %}
+<div class="message-card">
+    <p class="message">"{{ message }}"</p>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/bouquet.js') }}"></script>
+{% endblock %}

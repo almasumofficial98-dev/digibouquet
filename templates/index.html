@@ -1,50 +1,72 @@
 {% extends "base.html" %}
 {% block content %}
 
-<section class="hero">
-    <div class="container">
-        <h1>Create Your Digital Bouquet</h1>
-        <p>Select flowers and write a message.</p>
+<h1>Create Your Digital Bouquet</h1>
+<p class="subtitle">Pick up to 10 flowers</p>
+
+<form method="POST" action="/create">
+    <div class="flower-picker">
+        {% for i in range(1, 12) %}
+        <div class="flower-option" id="opt-f{{i}}" onclick="addFlower('f{{i}}')">
+            <img src="{{ url_for('static', filename='images/f' ~ i ~ '.png') }}" alt="Flower {{i}}">
+            <div class="badge hidden" id="badge-f{{i}}">×1</div>
+        </div>
+        {% endfor %}
     </div>
-</section>
 
-<section class="services">
-    <div class="container">
+    <p id="count" class="counter">0 / 10 selected</p>
 
-        <form action="/create" method="post" class="bouquet-form">
+    <textarea name="message" placeholder="Write a special message to accompany your bouquet..."></textarea>
 
-            <h3>Choose Flowers</h3>
+    <div id="hiddenFlowers"></div>
 
-            <div class="service-grid">
-                <label class="card">
-                    <input type="checkbox" name="flowers" value="Rose"> 🌹 Rose
-                </label>
-                <label class="card">
-                    <input type="checkbox" name="flowers" value="Lily"> 🌸 Lily
-                </label>
-                <label class="card">
-                    <input type="checkbox" name="flowers" value="Tulip"> 🌷 Tulip
-                </label>
-                <label class="card">
-                    <input type="checkbox" name="flowers" value="Sunflower"> 🌻 Sunflower
-                </label>
-            </div>
+    <button type="submit" id="submitBtn" disabled>Create Bouquet</button>
+</form>
 
-            <h3>Your Message</h3>
+<script>
+let selected = [];
 
-            <textarea
-                name="message"
-                class="message-box"
-                placeholder="Write your message here..."
-                rows="4"></textarea>
+function addFlower(f) {
+    if (selected.length >= 10) {
+        alert("You can only pick up to 10 flowers!");
+        return;
+    }
+    selected.push(f);
+    renderHidden();
+}
 
-            <br><br>
+function renderHidden() {
+    document.getElementById("count").innerText = `${selected.length} / 10 selected`;
+    document.getElementById("submitBtn").disabled = selected.length === 0;
 
-            <button type="submit">Create Bouquet</button>
+    // Reset badges
+    document.querySelectorAll(".badge").forEach(b => {
+        b.classList.add("hidden");
+        b.innerText = "";
+    });
 
-        </form>
+    // Count quantities
+    const counts = {};
+    selected.forEach(f => counts[f] = (counts[f] || 0) + 1);
 
-    </div>
-</section>
+    Object.keys(counts).forEach(f => {
+        const badge = document.getElementById(`badge-${f}`);
+        badge.innerText = `×${counts[f]}`;
+        badge.classList.remove("hidden");
+        document.getElementById(`opt-${f}`).classList.add("selected");
+    });
+
+    // Hidden inputs
+    const container = document.getElementById("hiddenFlowers");
+    container.innerHTML = "";
+    selected.forEach(f => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "flowers[]";
+        input.value = f;
+        container.appendChild(input);
+    });
+}
+</script>
 
 {% endblock %}
