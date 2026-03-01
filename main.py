@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import base64
+import os
 
 app = Flask(__name__)
 
@@ -14,11 +15,9 @@ def create():
     flowers = request.form.getlist("flowers")
     message = request.form.get("message", "").strip()
 
-    # Encode bouquet data (no DB)
-    raw_data = ",".join(flowers) + "|" + message
-    token = base64.urlsafe_b64encode(raw_data.encode()).decode()
+    raw = ",".join(flowers) + "|" + message
+    token = base64.urlsafe_b64encode(raw.encode()).decode()
 
-    # owner=1 → creator view only
     return redirect(url_for("bouquet", token=token, owner=1))
 
 
@@ -43,4 +42,5 @@ def bouquet(token):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
